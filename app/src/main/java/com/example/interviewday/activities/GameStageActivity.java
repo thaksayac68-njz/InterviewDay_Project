@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.interviewday.R;
 import com.example.interviewday.controllers.GameSessionManager;
 import com.example.interviewday.controllers.GameStageController;
+import com.example.interviewday.controllers.GimmickController;
 import com.example.interviewday.controllers.LevelController;
 import com.example.interviewday.controllers.NotebookController;
 import com.example.interviewday.controllers.TimerController;
@@ -301,11 +302,18 @@ public class GameStageActivity extends BaseActivity {
 
             NotebookController.addUnlockedDiscoveredItem(secretName);
 
+            // ปลดล็อกคำศัพท์ทั้งหมดของด่านนี้ลงสมุดโน้ตทันทีเมื่อพบไอเท็มลับ
+            int currentStage = gameStageController.getCurrentStage();
+            for (int qIdx = 0; qIdx < 3; qIdx++) {
+                GimmickController tempController = new GimmickController(currentStage, qIdx);
+                NotebookController.addUnlockedVocabulary(tempController.getVocabularyForCurrentQuestion());
+            }
+
             pauseGameStage();
 
             // เปิด GimmickDialog สำหรับตอบคำถามไอเท็มลับประจำด่าน
             GimmickDialog dialog = new GimmickDialog();
-            dialog.setStageAndQuestion(gameStageController.getCurrentStage(), 0);
+            dialog.setStageAndQuestion(currentStage, 0);
             dialog.show(getSupportFragmentManager(), "GimmickDialog");
         });
     }

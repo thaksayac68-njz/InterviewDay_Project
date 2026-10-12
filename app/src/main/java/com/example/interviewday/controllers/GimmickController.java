@@ -208,7 +208,11 @@ public class GimmickController {
         String targetWord = getTargetSentence();
         pronunciationController.setTargetSentence(targetWord);
         pronunciationController.recognizeSpeech(spokenText);
-        return pronunciationController.compareSentence();
+        boolean isCorrect = pronunciationController.compareSentence();
+        if (isCorrect) {
+            NotebookController.addUnlockedVocabulary(getVocabularyForCurrentQuestion());
+        }
+        return isCorrect;
     }
 
     // เปลี่ยนข้อคำถาม ถัดไป (0 -> 1 -> 2)
